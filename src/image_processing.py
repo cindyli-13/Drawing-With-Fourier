@@ -35,7 +35,7 @@ def get_contour_path(image: np.ndarray) -> list:
             if dist < shortest[0]:
                 shortest = [dist, i, c]
         ordered_contours.append(shortest[2])
-        curr_contou_coords = shortest[2][0]
+        curr_contour_coords = shortest[2][0]
         del filtered_contours[shortest[1]]
 
     ordered_contours.append(filtered_contours[0])
