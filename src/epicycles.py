@@ -17,12 +17,13 @@ class Circle():
             self.theta -= 2 * pi
 
 
-class EpicycleSeries():
+class EpicycleChain():
 
     # list of n circles
-    def __init__(self, center_x: float, center_y: float, circles: list):
+    def __init__(self, circle_res: int, center_x: float, center_y: float, circles: list):
         self.n = len(circles)
         self.circles = circles
+        self.circumference_coords_x, self.circumference_coords_y = [], []
 
         # init centers of circles (n+1 elements)
         self.centers_x = [center_x]
@@ -30,11 +31,17 @@ class EpicycleSeries():
 
         for circle in circles:
             
-            center_x = circle.amplitude * cos(circle.theta) + center_x
-            center_y = circle.amplitude * sin(circle.theta) + center_y
+            # circle centers
+            center_x += circle.amplitude * cos(circle.theta)
+            center_y += circle.amplitude * sin(circle.theta)
 
             self.centers_x.append(center_x)
             self.centers_y.append(center_y)
+
+            # points on circumference of circle
+            x, y = get_circle_coords(circle.amplitude, center_x, center_y, circle_res)
+            self.circumference_coords_x.append(x)
+            self.circumference_coords_y.append(y)
 
     def update(self, time: float):
 
@@ -51,8 +58,23 @@ class EpicycleSeries():
                 self.centers_x[i+1] = x
                 self.centers_y[i+1] = y
 
+                # points on circumference of circle
+                circumference_x, circumference_y = get_circle_coords(circle.amplitude, x, y, 100)
+                self.circumference_coords_x[i] = circumference_x
+                self.circumference_coords_y[i] = circumference_y
 
-# converts frequency domain params to epicycles
-def freq_to_epicycles(f_freq: list, center_x: float, center_y: float) -> EpicycleSeries:
+
+# converts frequency domain params to epicycle chain
+def freq_to_epicycles(f_freq: list, center_x: float, center_y: float) -> EpicycleChain:
     circles = [Circle(params[0], params[1], params[2]) for params in f_freq]
-    return EpicycleSeries(center_x, center_y, circles)
+    return EpicycleChain(100, center_x, center_y, circles)
+
+
+def get_circle_coords(radius: float, center_x: float, center_y: float, num_points: int) -> tuple:
+    x, y = [], []
+    theta = 0
+    for i in range(num_points+1):
+        theta += 2*pi/num_points
+        x.append(radius * cos(theta) + center_x)
+        y.append(radius * sin(theta) + center_y)
+    return x, y
