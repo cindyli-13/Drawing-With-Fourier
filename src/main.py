@@ -11,8 +11,11 @@ from fourier_transform import dft_complex
 
 def main():
 
-    # number of harmonics
-    n = 50
+    # parameters to tweak
+    n = 100
+    drawing_speed = 25 
+    fps = 60                # this one doesn't seem to have an effect on anything
+    window_size = 2000
 
     img = cv2.imread('../images/joseph_fourier.jpg')
 
@@ -24,8 +27,8 @@ def main():
     
     # create plot
     app = QApplication(sys.argv)
-    main = MainWindow(60, N, f_freq)
-    main.resize(2000, 2000)
+    main = MainWindow(fps, N, drawing_speed, f_freq)
+    main.resize(window_size, window_size)
     main.show()
     sys.exit(app.exec_())
 

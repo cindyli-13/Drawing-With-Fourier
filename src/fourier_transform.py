@@ -22,7 +22,7 @@ def dft(f_time_x: list, f_time_y: list, n: int) -> tuple:
                 im -= x_in * sin(theta)
             re /= N
             im /= N
-            f_freq.append([sqrt(re**2 + im**2), k * base_freq * 100, atan2(im, re)])    # scale frequency to a viewable value
+            f_freq.append([sqrt(re**2 + im**2), k * base_freq, atan2(im, re)])    # scale frequency to a viewable value
 
     return f_freq_x, f_freq_y, N
 
@@ -44,6 +44,6 @@ def dft_complex(f_time_x: list, f_time_y: list, n: int) -> tuple:
             theta = 2*pi*k*t/N
             c_out += c_in * (cos(theta) - complex(0,1) * sin(theta))
         c_out /= N
-        f_freq.append([abs(c_out), k * base_freq * 100, atan2(c_out.imag, c_out.real)])    # scale frequency to a viewable value
+        f_freq.append([abs(c_out), k * base_freq, atan2(c_out.imag, c_out.real)])    # scale frequency to a viewable value
 
     return f_freq, N

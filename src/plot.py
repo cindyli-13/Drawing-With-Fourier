@@ -11,7 +11,7 @@ from epicycles import EpicycleChain, freq_to_epicycles
 
 class MainWindow(QMainWindow):
 
-    def __init__(self, fps: float, period_in_frames: int, f_freq: list, *args, **kwargs):
+    def __init__(self, fps: float, period_in_frames: int, drawing_speed: float, f_freq: list, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.graphWidget = pg.PlotWidget()
         self.setCentralWidget(self.graphWidget)
@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
         self.graphWidget.setYRange(0, 100, padding=0)
 
         # create epicycle chain for x and y functions
-        self.epicycle_chain = freq_to_epicycles(f_freq, 0, 0)
+        self.epicycle_chain = freq_to_epicycles(f_freq, 0, 0, drawing_speed)
 
         # points on circles
         self.points = self.graphWidget.plot([], [], pen=None, symbol='o', symbolBrush='w', symbolSize=2)
@@ -41,9 +41,8 @@ class MainWindow(QMainWindow):
             self.circumference_points.append(self.graphWidget.plot([], [], pen=pg.mkPen(color=(140,180,240), width=0.2)))
 
         # points on sketch
-        pen = pg.mkPen(color='w', width=1)
         self.sketch_data_x, self.sketch_data_y = [], []
-        self.sketch = self.graphWidget.plot([], [], pen=pen)
+        self.sketch = self.graphWidget.plot([], [], pen=pg.mkPen(color='w', width=1))
 
         # sketch point
         self.sketch_point = self.graphWidget.plot([], [], pen=None, symbol='o', symbolBrush='w', symbolSize=5)
