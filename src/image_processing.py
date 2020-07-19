@@ -7,19 +7,23 @@ from functools import reduce
 def get_contour_path(image: np.ndarray) -> list:
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (3,3), 0)
-    canny = cv2.Canny(blurred, 150, 220)
+    canny = cv2.Canny(blurred, 120, 220)
     ret, thresh = cv2.threshold(canny, 127, 255, 0)
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
     filtered_contours = []
     for i, contour in enumerate(contours):
-        if cv2.contourArea(contour) > 5:
+        if cv2.contourArea(contour) > 10:
             contour = np.append(contour, np.array([contour[0]]), axis=0)
             filtered_contours.append(contour)
 
     # no contours found
     if len(filtered_contours) == 0:
         return []
+
+    # save image for reference
+    black_img = np.zeros(image.shape)
+    cv2.imwrite('../images/results/contours.jpg', cv2.drawContours(black_img, filtered_contours, -1, (0,255,0), 1))
 
     # order contours for drawability
     # greedy approach: find next closest contour based on contour's starting point
