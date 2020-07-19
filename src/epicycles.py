@@ -44,6 +44,7 @@ class EpicycleChain():
                 x += circle.amplitude * cos(circle.theta)
                 y += circle.amplitude * sin(circle.theta)
 
+                # circle centers
                 self.centers_x[i+1] = x
                 self.centers_y[i+1] = y
 
@@ -53,7 +54,7 @@ class EpicycleChain():
                 self.circumference_coords_y[i] = circumference_y
 
 
-# converts frequency domain params to epicycle chain
+# converts frequency domain parameters to epicycle chain
 def freq_to_epicycles(f_freq: list, center_x: float, center_y: float, drawing_speed: float) -> EpicycleChain:
     circles = [Circle(params[0], params[1] * drawing_speed, params[2]) for params in f_freq]
     return EpicycleChain(70, center_x, center_y, circles)

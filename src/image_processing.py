@@ -21,7 +21,7 @@ def get_contour_path(image: np.ndarray) -> list:
     if len(filtered_contours) == 0:
         return []
 
-    # save image for reference
+    # save contour image for reference
     black_img = np.zeros(image.shape)
     cv2.imwrite('../images/results/contours.jpg', cv2.drawContours(black_img, filtered_contours, -1, (0,255,0), 1))
 
@@ -55,7 +55,6 @@ def separate_coords(contour_path: list) -> tuple:
     return list(map(lambda x: x[0], contour_path)), list(map(lambda x: x[1], contour_path))
 
 
-# returns f_time_x, f_time_y
 def get_time_domain_func(image: np.ndarray) -> tuple:
 
     contour_path = get_contour_path(image)

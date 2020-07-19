@@ -13,39 +13,39 @@ class MainWindow(QMainWindow):
 
     def __init__(self, fps: float, period_in_frames: int, drawing_speed: float, f_freq: list, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
-        self.graphWidget = pg.PlotWidget()
-        self.setCentralWidget(self.graphWidget)
+        self.graph = pg.PlotWidget()
+        self.setCentralWidget(self.graph)
         self.setWindowTitle("Drawing with Fourier")
 
         self.period_in_frames = period_in_frames
         self.fps = fps
 
-        self.graphWidget.setBackground((15,45,90))
+        self.graph.setBackground((15,45,90))
 
-        self.graphWidget.showGrid(x=True, y=True)
-        self.graphWidget.setXRange(0, 100, padding=0)
-        self.graphWidget.setYRange(0, 100, padding=0)
+        self.graph.showGrid(x=True, y=True)
+        self.graph.setXRange(0, 700, padding=0)
+        self.graph.setYRange(0, 700, padding=0)
 
         # create epicycle chain for x and y functions
         self.epicycle_chain = freq_to_epicycles(f_freq, 0, 0, drawing_speed)
 
         # points on circles
-        self.points = self.graphWidget.plot([], [], pen=None, symbol='o', symbolBrush='w', symbolSize=2)
+        self.points = self.graph.plot([], [], pen=None, symbol='o', symbolBrush='w', symbolSize=2)
         
         # lines connecting circle centers to circle points and points on circle circumferences
         self.lines = []
         self.circumference_points = []
 
         for i in range(self.epicycle_chain.n):
-            self.lines.append(self.graphWidget.plot([], [], pen=pg.mkPen(color=(160,200,255), width=0.5)))
-            self.circumference_points.append(self.graphWidget.plot([], [], pen=pg.mkPen(color=(140,180,240), width=0.2)))
+            self.lines.append(self.graph.plot([], [], pen=pg.mkPen(color=(160,200,255), width=0.5)))
+            self.circumference_points.append(self.graph.plot([], [], pen=pg.mkPen(color=(140,180,240), width=0.2)))
 
         # points on sketch
         self.sketch_data_x, self.sketch_data_y = [], []
-        self.sketch = self.graphWidget.plot([], [], pen=pg.mkPen(color='w', width=1))
+        self.sketch = self.graph.plot([], [], pen=pg.mkPen(color='w', width=1))
 
         # sketch point
-        self.sketch_point = self.graphWidget.plot([], [], pen=None, symbol='o', symbolBrush='w', symbolSize=5)
+        self.sketch_point = self.graph.plot([], [], pen=None, symbol='o', symbolBrush='w', symbolSize=5)
 
         # time reference (seconds)
         self.init_time = time()

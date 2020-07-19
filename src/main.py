@@ -13,7 +13,7 @@ def main():
 
     # parameters to tweak
     n = 100
-    drawing_speed = 100
+    drawing_speed = 0.02
     fps = 60                # this one doesn't seem to have an effect on anything...
     window_size = 2000
 
