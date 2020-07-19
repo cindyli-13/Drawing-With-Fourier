@@ -21,7 +21,7 @@ def get_contour_path(image: np.ndarray) -> list:
     return filtered_contours[0] if len(filtered_contours) > 0 else []
 
 
-# separate contour path into x and y values
+# separate contour path into width and height coordinates
 def separate_coords(contour_path: list) -> tuple:
     return list(map(lambda x: x[0], contour_path)), list(map(lambda x: x[1], contour_path))
 
@@ -35,6 +35,6 @@ def get_time_domain_func(image: np.ndarray) -> tuple:
     max_y = image.shape[1]
     contour_path = list(map(lambda x: [x[0][0], -x[0][1] + max_y], contour_path))
 
-    f_time_y, f_time_x = separate_coords(contour_path)
+    f_time_x, f_time_y = separate_coords(contour_path)
 
     return f_time_x, f_time_y
