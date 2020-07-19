@@ -11,7 +11,7 @@ def dft(f_time_x: list, f_time_y: list, n: int) -> tuple:
     N = len(f_time_x)
     base_freq = 1/N
 
-    for k in range(n):
+    for k in range(min(n, N)):
 
         for f_time, f_freq in [(f_time_x, f_freq_x), (f_time_y, f_freq_y)]:
             re = 0
@@ -38,7 +38,7 @@ def dft_complex(f_time_x: list, f_time_y: list, n: int) -> tuple:
     N = len(complex_inputs)
     base_freq = 1/N
 
-    for k in range(-n//2, n//2):
+    for k in range(-min(n, N)//2, min(n, N)//2):
         c_out = complex(0,0)
         for t, c_in in enumerate(complex_inputs):
             theta = 2*pi*k*t/N

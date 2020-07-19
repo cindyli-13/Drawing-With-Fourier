@@ -12,12 +12,12 @@ from fourier_transform import dft_complex
 def main():
 
     # parameters to tweak
-    n = 100
-    drawing_speed = 25 
+    n = 300
+    drawing_speed = 40
     fps = 60                # this one doesn't seem to have an effect on anything
     window_size = 2000
 
-    img = cv2.imread('../images/joseph_fourier.jpg')
+    img = cv2.imread('../images/Homer_Simpson.jpg')
 
     f_time_x, f_time_y = get_time_domain_func(img)
     f_freq, N = dft_complex(f_time_x, f_time_y, n)

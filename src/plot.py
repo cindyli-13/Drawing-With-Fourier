@@ -49,7 +49,6 @@ class MainWindow(QMainWindow):
 
         # time reference (seconds)
         self.init_time = time()
-        self.prev_time = 0
 
         # set up timer
         self.timer = QTimer()
@@ -58,11 +57,12 @@ class MainWindow(QMainWindow):
         self.timer.start()
 
     def update(self):
-        t = time() - self.init_time
 
         # no need to update if no data
         if self.epicycle_chain.n == 0:
             return
+
+        t = time() - self.init_time
 
         self.epicycle_chain.update(t)
 
@@ -89,6 +89,3 @@ class MainWindow(QMainWindow):
         
         # sketch point
         self.sketch_point.setData([x], [y])
-
-        # update previous time
-        self.prev_time = time() - self.init_time
