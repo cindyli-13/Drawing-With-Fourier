@@ -1,4 +1,6 @@
 from time import time
+import numpy as np
+import cv2
 
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import QTimer
@@ -6,19 +8,18 @@ from PyQt5.QtGui import QPen
 from pyqtgraph import PlotWidget
 import pyqtgraph as pg
 
+from image_processing import get_time_domain_func
+from fourier_transform import dft_complex
 from epicycles import EpicycleChain, freq_to_epicycles
 
 
 class MainWindow(QMainWindow):
 
-    def __init__(self, fps: float, period_in_frames: int, drawing_speed: float, f_freq: list, *args, **kwargs):
+    def __init__(self, img: np.ndarray, n: int, drawing_speed: float, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.graph = pg.PlotWidget()
         self.setCentralWidget(self.graph)
         self.setWindowTitle("Drawing with Fourier")
-
-        self.period_in_frames = period_in_frames
-        self.fps = fps
 
         self.graph.setBackground((15,45,90))
 
@@ -26,8 +27,18 @@ class MainWindow(QMainWindow):
         self.graph.setXRange(0, 700, padding=0)
         self.graph.setYRange(0, 700, padding=0)
 
+        # convert image to frequency function
+        f_time_x, f_time_y = get_time_domain_func(img)
+        f_freq, N = dft_complex(f_time_x, f_time_y, n)
+
+        # sort by largest to smallest amplitudes
+        f_freq.sort(key=(lambda x: x[0]), reverse=True)
+
         # create epicycle chain for x and y functions
         self.epicycle_chain = freq_to_epicycles(f_freq, 0, 0, drawing_speed)
+
+        self.period_in_frames = N
+        self.fps = 60
 
         # points on circles
         self.points = self.graph.plot([], [], pen=None, symbol='o', symbolBrush='w', symbolSize=2)
@@ -52,7 +63,7 @@ class MainWindow(QMainWindow):
 
         # set up timer
         self.timer = QTimer()
-        self.timer.setInterval(1/fps)
+        self.timer.setInterval(1/self.fps)
         self.timer.timeout.connect(self.update)
         self.timer.start()
 
